@@ -1,0 +1,32 @@
+{
+  "name": "jsdoc-ast",
+  "version": "0.0.1",
+  "description": "JS docs to AST converter",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agrarium/jsdoc-ast.git"
+  },
+  "keywords": [
+    "jsdoc",
+    "parse",
+    "docs",
+    "ast",
+    "json"
+  ],
+  "author": "Anton Vinogradov <winogradovaa@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/agrarium/jsdoc-ast/issues"
+  },
+  "homepage": "https://github.com/agrarium/jsdoc-ast#readme",
+  "devDependencies": {
+    "jest": "^21.2.1"
+  },
+  "dependencies": {
+    "babel-core": "^6.26.0"
+  }
+}
