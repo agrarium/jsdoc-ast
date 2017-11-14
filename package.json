@@ -28,5 +28,10 @@
   },
   "dependencies": {
     "babel-core": "^6.26.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "jsoak": "<rootDir>/index.js"
+    }
   }
 }

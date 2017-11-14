@@ -1,5 +1,5 @@
 const { basename } = require('path');
-const jstree = require('..');
+const jsoak = require('jsoak');
 
 describe('node modules', () => {
     it('default named function', () => {
@@ -52,7 +52,7 @@ describe('node modules', () => {
             ]
         };
 
-        expect(jstree(source, file)).toMatchObject(tree);
+        expect(jsoak(source, file)).toMatchObject(tree);
     });
 });
 
