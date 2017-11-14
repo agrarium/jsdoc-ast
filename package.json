@@ -1,14 +1,14 @@
 {
-  "name": "jsdoc-ast",
+  "name": "jsoak",
   "version": "0.0.1",
-  "description": "JS docs to AST converter",
+  "description": "JS tree based on AST and JSDoc",
   "main": "index.js",
   "scripts": {
     "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/agrarium/jsdoc-ast.git"
+    "url": "git+https://github.com/agrarium/jsoak.git"
   },
   "keywords": [
     "jsdoc",
@@ -20,9 +20,9 @@
   "author": "Anton Vinogradov <winogradovaa@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/agrarium/jsdoc-ast/issues"
+    "url": "https://github.com/agrarium/jsoak/issues"
   },
-  "homepage": "https://github.com/agrarium/jsdoc-ast#readme",
+  "homepage": "https://github.com/agrarium/jsoak#readme",
   "devDependencies": {
     "jest": "^21.2.1"
   },
