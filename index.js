@@ -1,13 +1,13 @@
 const babelCore = require('babel-core');
 
-const parser = require('./lib/parser');
+const Parser = require('./lib/parser');
 
 module.exports = function ast(source, file) {
-    const tree = {};
+    const parser = new Parser({ file });
 
     babelCore.transform(source, {
-        plugins: parser({ tree, file })()
+        plugins: parser.visitor
     });
 
-    return tree;
+    return parser.tree;
 };

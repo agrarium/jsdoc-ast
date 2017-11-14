@@ -16,12 +16,14 @@ describe('node modules', () => {
         `;
 
         const tree = {
+            id: 0,
             name: 'function',
             originalName: file,
             kind: 1,
             kindString: 'ExternalModule',
             children: [
                 {
+                    id: 1,
                     name: 'moduleFunction',
                     kind: 2,
                     kindString: 'Module',
