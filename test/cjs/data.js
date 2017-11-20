@@ -1,5 +1,6 @@
-[
+module.exports = [
     {
+        type: 'unknown default export',
         result: [{
             name: null,
             kind: 2,
@@ -17,10 +18,11 @@
         }],
         sources: [
             `/** Ololo */
-            module.exports = function(arg) {};`,
+            module.exports = function(arg) {};`
         ]
     },
     {
+        type: 'simple default export',
         result: [{
             name: 'moduleFunction',
             kind: 2,
@@ -45,8 +47,8 @@
             module.exports = moduleFunction;`
         ]
     },
-
     {
+        type: 'object exports',
         result: [{
             name: 'moduleFunction',
             kind: 2,
@@ -88,8 +90,8 @@
             function moduleFunction() {}`
         ]
     },
-
     {
+        type: 'mixed export',
         result: {},
         sources: [
             `/** Ololo */
@@ -98,4 +100,4 @@
             module.exports.moduleFunction = function() {};`
         ]
     }
-]
+];
