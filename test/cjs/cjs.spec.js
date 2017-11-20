@@ -3,6 +3,19 @@ const jsoak = require('jsoak');
 
 const data = require('./data');
 
+function assert(message) {
+    return {
+        test: (res, exp) => {
+            try {
+                expect(res).toMatchObject(exp);
+            } catch (error) {
+                console.error(message);
+                throw new Error(error);
+            }
+        }
+    }
+}
+
 function validateTree(data) {
     const wrapInFile = children => ({ children });
     for(let spec of data) {
@@ -10,7 +23,8 @@ function validateTree(data) {
             const { result, sources } = spec;
 
             for(let source of sources) {
-                expect(jsoak(source, 'file.js')).toMatchObject(wrapInFile(result));
+                assert(`Couldn't parse source: ${source}`)
+                    .test(jsoak(source, 'file.js'), wrapInFile(result));
             }
         })
     }
