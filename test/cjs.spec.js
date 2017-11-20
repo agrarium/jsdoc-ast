@@ -1,7 +1,8 @@
 const { basename } = require('path');
 const jsoak = require('jsoak');
 
-describe('node modules', () => {
+describe('cjs', () => {
+    
     it('default named function', () => {
         const file = basename(__filename);
 
@@ -17,32 +18,34 @@ describe('node modules', () => {
 
         const tree = {
             id: 0,
-            name: 'function',
+            name: 'cjs',
             originalName: file,
             kind: 1,
-            kindString: 'ExternalModule',
+            // kindString: 'ExternalModule',
             children: [
                 {
                     id: 1,
                     name: 'moduleFunction',
                     kind: 2,
-                    kindString: 'Module',
+                    // kindString: 'Module',
                     // flags: {
                     //   isExported: true
                     // },
                     signatures: [
                         {
+                            id: 2,
                             name: 'moduleFunction',
                             kind: 4096,
-                            kindString: 'CallSignature',
+                            // kindString: 'CallSignature',
                             // "comment": {
                             //     "shortText": "This is a function that is extended by a module."
                             // },
                             parameters: [
                                 {
+                                    id: 3,
                                     name: 'arg',
                                     kind: 32768,
-                                    kindString: 'Parameter',
+                                    // kindString: 'Parameter',
                                     // "comment": {
                                     //   "text": "An argument.\n"
                                     // },
