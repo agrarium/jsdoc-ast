@@ -1,33 +1,105 @@
-const { basename } = require('path');
-const jsoak = require('jsoak');
+const validate = require('../utils/validate');
 
-const data = require('./data');
+validate([
+    {
+        type: 'unknown default export',
+        result: [{
+            name: null,
+            kind: 2,
+            signatures: [
+                {
+                    name: null,
+                    kind: 4096,
+                    flags: {isExported: true},
+                    comment: {shortText: 'Ololo'},
+                    parameters: [
+                        {name: 'arg', kind: 32768}
+                    ]
+                }
+            ]
+        }],
+        sources: [
+`/** Ololo */
+module.exports = function(arg) {};`
+        ]
+    },
+    {
+        type: 'simple default export',
+        result: [{
+            name: 'moduleFunction',
+            kind: 2,
+            signatures: [
+                {
+                    name: 'moduleFunction',
+                    kind: 4096,
+                    flags: {isExported: true, isDefault: true},
+                    comment: {shortText: 'Ololo'},
+                    parameters: [
+                        {name: 'arg', kind: 32768}
+                    ]
+                }
+            ]
+        }],
+        sources: [
+`/** Ololo */
+module.exports = function moduleFunction(arg) {};`,
 
-function assert(message) {
-    return {
-        test: (res, exp) => {
-            try {
-                expect(res).toMatchObject(exp);
-            } catch (error) {
-                console.error(message);
-                throw new Error(error);
-            }
-        }
+`/** Ololo */
+const moduleFunction = function(arg) {}
+module.exports = moduleFunction;`
+        ]
+    },
+    {
+        type: 'object exports',
+        result: [{
+            name: 'moduleFunction',
+            kind: 2,
+            signatures: [
+                {
+                    name: 'moduleFunction',
+                    kind: 4096,
+                    flags: {isExported: true},
+                    comment: {shortText: 'Ololo'},
+                    parameters: [
+                        {name: 'arg', kind: 32768}
+                    ]
+                }
+            ]
+        }],
+        sources: [
+`/** Ololo */
+exports.moduleFunction = function(arg) {}`,
+
+`/** Ololo */
+const ebalo = function(zawali) {}
+exports.moduleFunction = ebalo;`,
+
+`const ebalo = 'moduleFunction';
+/** Ololo */
+exports[ebalo] = function(arg) {};`,
+
+`const exports = {
+    /** Ololo */
+    moduleFunction: function(arg) {}
+};
+module.exports = exports;`,
+
+`/** Ololo */
+Object.assign(module.exports, { moduleFunction: function(arg) {} });`,
+
+`Object.assign(module.exports, { moduleFunction });
+/** Ololo */
+function moduleFunction() {}`
+        ]
+    },
+    {
+        type: 'mixed export',
+        result: {},
+        sources: [
+`/** Ololo */
+module.exports = function(arg) {}
+/** Ne ololo */
+module.exports.moduleFunction = function() {};`
+        ]
     }
-}
-
-function validateTree(data) {
-    const wrapInFile = children => ({ children });
-    for(let spec of data) {
-        it(spec.type, function() {
-            const { result, sources } = spec;
-
-            for(let source of sources) {
-                assert(`Couldn't parse source: ${source}`)
-                    .test(jsoak(source, 'file.js'), wrapInFile(result));
-            }
-        })
-    }
-}
-
-validateTree(data);
+]);
