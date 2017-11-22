@@ -15,13 +15,16 @@ function assert(message) {
 
 module.exports = function validate(data) {
     const wrapInFile = children => ({ children });
+
     for(let spec of data) {
-        it(spec.type, function() {
+        describe(spec.type, () => {
             const { result, sources } = spec;
 
             for(let source of sources) {
-                assert(`Couldn't parse source: \n${source}`)
-                    .test(jsoak(source, 'file.js'), wrapInFile(result));
+                it(source.name || source.split('\n')[0].slice(0, 60), () => {
+                    assert(`Couldn't parse source: \n${source}`)
+                        .test(jsoak(source.code || source, 'file.js'), wrapInFile(result));
+                });
             }
         })
     }

@@ -2,7 +2,7 @@ const validate = require('../utils/validate');
 
 validate([
     {
-        type: 'unknown default export',
+        type: 'unknown default export', // describe
         result: [{
             name: null,
             kind: 2,
@@ -18,10 +18,15 @@ validate([
                 }
             ]
         }],
-        sources: [
-`/** Ololo */
-module.exports = function(arg) {};`
-        ]
+        sources: [{
+            name: 'simple', // it
+            code: unIndent`
+                /** Ololo */
+                module.exports = function(arg) {}; // Default
+                // IS NOT: export default function(arg) {};
+                // {__es6Module: true, default: function(arg) {}, ololo: function ololo(arg) {}}
+            `
+        }]
     },
     {
         type: 'simple default export',
@@ -32,7 +37,7 @@ module.exports = function(arg) {};`
                 {
                     name: 'moduleFunction',
                     kind: 4096,
-                    flags: {isExported: true, isDefault: true},
+                    flags: {isExported: true},
                     comment: {shortText: 'Ololo'},
                     parameters: [
                         {name: 'arg', kind: 32768}
@@ -40,14 +45,20 @@ module.exports = function(arg) {};`
                 }
             ]
         }],
-        sources: [
-`/** Ololo */
-module.exports = function moduleFunction(arg) {};`,
-
-`/** Ololo */
-const moduleFunction = function(arg) {}
-module.exports = moduleFunction;`
-        ]
+        sources: [{
+            name: 'named function',
+            code: unIndent`
+                /** Ololo */
+                module.exports = function moduleFunction(arg) {};
+            `,
+        }, {
+            name: 'anonymous function in variable',
+            code: unIndent`
+                /** Ololo */
+                const moduleFunction = function(arg) {}
+                module.exports = moduleFunction;
+            `
+        }]
     },
     {
         type: 'object exports',
@@ -67,39 +78,79 @@ module.exports = moduleFunction;`
             ]
         }],
         sources: [
-`/** Ololo */
-exports.moduleFunction = function(arg) {}`,
+            unIndent`
+                /** Ololo */
+                exports.moduleFunction = function(arg) {}
+            `,
 
-`/** Ololo */
-const ebalo = function(zawali) {}
-exports.moduleFunction = ebalo;`,
+            unIndent`
+                /** Ololo */
+                const ebalo = function(zawali) {}
+                exports.moduleFunction = ebalo;
+            `,
 
-`const ebalo = 'moduleFunction';
-/** Ololo */
-exports[ebalo] = function(arg) {};`,
+            unIndent`
+                const ebalo = 'moduleFunction';
+                /** Ololo */
+                exports[ebalo] = function(arg) {};
+            `,
 
-`const exports = {
-    /** Ololo */
-    moduleFunction: function(arg) {}
-};
-module.exports = exports;`,
+            unIndent`
+                const exports = {
+                    /** Ololo */
+                    moduleFunction: function(arg) {}
+                };
+                module.exports = exports;
+            `,
 
-`/** Ololo */
-Object.assign(module.exports, { moduleFunction: function(arg) {} });`,
+            unIndent`
+                /** Ololo */
+                Object.assign(module.exports, { moduleFunction: function(arg) {} });
+            `,
 
-`Object.assign(module.exports, { moduleFunction });
-/** Ololo */
-function moduleFunction() {}`
+            unIndent`
+                Object.assign(module.exports, { moduleFunction });
+                /** Ololo */
+                function moduleFunction() {}
+            `
         ]
     },
     {
         type: 'mixed export',
         result: {},
         sources: [
-`/** Ololo */
-module.exports = function(arg) {}
-/** Ne ololo */
-module.exports.moduleFunction = function() {};`
+            unIndent`
+                /** Ololo */
+                module.exports = function(arg) {}
+                /** Ne ololo */
+                module.exports.moduleFunction = function() {};
+            `
+        ]
+    },
+    {
+        skip: true,
+        type: 'dich',
+        result: {},
+        sources: [
+            unIndent`
+                exports = Object.assign({}, require('./email-manager'));
+                exports = Object.assign(exports, require('./email-daemon'));
+                module.exports = exports;
+            `
         ]
     }
 ]);
+
+/**
+ * Prevents leading spaces in a multiline template literal from appearing in the resulting string
+ * @param {string[]} strings The strings in the template literal
+ * @returns {string} The template literal, with spaces removed from all lines
+ */
+function unIndent(strings) {
+    const templateValue = strings[0];
+    const lines = templateValue.replace(/^\n/, "").replace(/\n\s*$/, "").split("\n");
+    const lineIndents = lines.filter(line => line.trim()).map(line => line.match(/ */)[0].length);
+    const minLineIndent = Math.min.apply(null, lineIndents);
+
+    return lines.map(line => line.slice(minLineIndent)).join("\n");
+}
