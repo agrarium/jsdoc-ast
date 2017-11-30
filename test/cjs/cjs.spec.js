@@ -5,7 +5,7 @@ validate([
         type: 'unknown default export', // describe
         result: [{
             name: null,
-            kind: 2,
+            kind: 64, // Function
             signatures: [
                 {
                     name: null,
